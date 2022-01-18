@@ -27,20 +27,26 @@
     <p>
       <form action="/">
         <textarea name="deps" rows="10" cols="80">%%deps%%</textarea>
+        
         <br>
+        
         <input type="checkbox" id="devDeps" name="__dev_deps" %%dev_deps%%>
         <label for="devDeps">devDeps</label>
+        
         <br>
+        
         <input type="checkbox" id="preserveVersions" name="__preserve_versions" %%preserve_versions%%>
         <label for="preserveVersions">preserveVersions</label>
+        
         <br>
+        
         <input type="submit" value="Just Hurry!">
       </form>
     </p>
 
     <hr />
 
-    <h2>You may copy this result:</h2>
+    <h2>You may copy this command [with a click of your mouse]:</h2>
     <pre style="font-size: 2em;" onclick="navigator.clipboard.writeText(this.textContent)"><code>%%output%%</code></pre>
   </body>
 </html>
