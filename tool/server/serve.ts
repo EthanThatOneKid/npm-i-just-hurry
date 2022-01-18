@@ -17,9 +17,10 @@ async function handler(req: Request): Promise<Response> {
 
       const result = justHurry(deps, devDeps, preserveVersions);
 
-      return new Response(hydrate(deps, result, devDeps, preserveVersions), {
-        headers: { "Content-Type": "text/html" },
-      });
+      return new Response(
+        await hydrate(deps, result, devDeps, preserveVersions),
+        { headers: { "Content-Type": "text/html" } },
+      );
     }
     default: {
       const pkg = await fetchPackage(url);
@@ -36,9 +37,10 @@ async function handler(req: Request): Promise<Response> {
         }
 
         if (result.length > 0) {
-          return new Response(hydrate("", result, true, true), {
-            headers: { "Content-Type": "text/html" },
-          });
+          return new Response(
+            await hydrate("", result, true, true),
+            { headers: { "Content-Type": "text/html" } },
+          );
         }
       }
 
