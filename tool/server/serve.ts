@@ -1,16 +1,27 @@
 import { serve } from "../../deps/std/http.ts";
+import { justHurry } from "../lib/mod.ts";
 
-const html = Deno.readTextFileSync("./index.html");
-console.log({ html });
+const HTML_TEMPLATE = Deno.readTextFileSync("./tool/server/index.html");
 
 function handler(req: Request): Response {
   switch (req.method.toUpperCase()) {
-    case "POST": {
-      // TODO: Get textarea input from body and process the npm command.
-      return new Response(html);
-    }
     default: {
-      return new Response(html);
+      const url = new URL(req.url);
+      const deps = decodeURIComponent(
+        url.searchParams.get("deps") ?? `{ "example": "1.0.0" }`,
+      );
+      const devDeps = url.searchParams.get("devDeps") === "true";
+      const preserveVersions =
+        url.searchParams.get("preserveVersions") === "true";
+
+      const result = justHurry(deps);
+
+      return new Response(
+        HTML_TEMPLATE
+          .replace("%%deps%%", JSON.stringify(deps, null, 2))
+          .replace("%%output%%", result),
+        { headers: { "Content-Type": "text/html" } },
+      );
     }
   }
 }

@@ -8,17 +8,26 @@
   <body>
     <h1>npm-i-just-hurry</h1>
     <p>
-    <form action="/">
-      <textarea name="deps" rows="10" cols="80">{ "example": "1.0.0" }</textarea>
-      <br>
-      <input type="checkbox" name="devDeps" value="true">
-      <label for="devDeps">devDeps</label>
-      <br>
-      <input type="checkbox" name="preserveVersions" value="true">
-      <label for="preserveVersions">preserveVersions</label>
-      <br>
-      <input type="submit" value="Just Hurry!">
-    </form>
+      <form action="/">
+        <textarea name="deps" rows="10" cols="80">%%deps%%</textarea>
+        <br>
+        <input type="checkbox" id="devDeps" name="__dev_deps">
+        <label for="devDeps">devDeps</label>
+        <br>
+        <input type="checkbox" id="preserveVersions" name="__preserve_versions" checked>
+        <label for="preserveVersions">preserveVersions</label>
+        <br>
+        <input type="submit" value="Just Hurry!">
+      </form>
     </p>
+
+    <hr />
+
+    <label>You may copy this result:</label>
+    <h1>
+      <pre>
+        <code>%%output%%</code>
+      </pre>
+    </h1>
   </body>
 </html>
