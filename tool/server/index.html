@@ -4,17 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>npm-i-just-hurry</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+
+    <style>
+      html, body {
+        margin: 0 2em 0 2em;
+      }
+    </style>
   </head>
+
   <body>
     <h1>npm-i-just-hurry</h1>
+
+    <a href="https://github.com/EthanThatOneKid/npm-i-just-hurry">
+      <img
+        src="https://img.shields.io/badge/code-GitHub-000?logo=github"
+        alt="GitHub"
+      />
+    </a>
+    
     <p>
       <form action="/">
         <textarea name="deps" rows="10" cols="80">%%deps%%</textarea>
         <br>
-        <input type="checkbox" id="devDeps" name="__dev_deps">
+        <input type="checkbox" id="devDeps" name="__dev_deps" %%dev_deps%%>
         <label for="devDeps">devDeps</label>
         <br>
-        <input type="checkbox" id="preserveVersions" name="__preserve_versions" checked>
+        <input type="checkbox" id="preserveVersions" name="__preserve_versions" %%preserve_versions%%>
         <label for="preserveVersions">preserveVersions</label>
         <br>
         <input type="submit" value="Just Hurry!">
@@ -23,11 +40,9 @@
 
     <hr />
 
-    <label>You may copy this result:</label>
-    <h1>
-      <pre>
+    <h2>You may copy this result:</h2>
+      <pre style="font-size: 2em;">
         <code>%%output%%</code>
       </pre>
-    </h1>
   </body>
 </html>

@@ -1,27 +1,48 @@
 import { serve } from "../../deps/std/http.ts";
 import { justHurry } from "../lib/mod.ts";
+import { fetchPackage } from "./fetch_pkg.ts";
+import { hydrate } from "./hydrate.ts";
 
-const HTML_TEMPLATE = Deno.readTextFileSync("./tool/server/index.html");
+async function handler(req: Request): Promise<Response> {
+  const url = new URL(req.url);
 
-function handler(req: Request): Response {
-  switch (req.method.toUpperCase()) {
-    default: {
+  switch (url.pathname) {
+    case "/": {
       const url = new URL(req.url);
-      const deps = decodeURIComponent(
-        url.searchParams.get("deps") ?? `{ "example": "1.0.0" }`,
-      );
-      const devDeps = url.searchParams.get("devDeps") === "true";
+
+      const deps = url.searchParams.get("deps") ?? `{ "example": "1.0.0" }`;
       const preserveVersions =
-        url.searchParams.get("preserveVersions") === "true";
+        url.searchParams.get("__preserve_versions") !== null;
+      const devDeps = url.searchParams.get("__dev_deps") !== null;
 
-      const result = justHurry(deps);
+      const result = justHurry(deps, devDeps, preserveVersions);
 
-      return new Response(
-        HTML_TEMPLATE
-          .replace("%%deps%%", JSON.stringify(deps, null, 2))
-          .replace("%%output%%", result),
-        { headers: { "Content-Type": "text/html" } },
-      );
+      return new Response(hydrate(deps, result, devDeps, preserveVersions), {
+        headers: { "Content-Type": "text/html" },
+      });
+    }
+    default: {
+      const pkg = await fetchPackage(url);
+      if (pkg !== null) {
+        let result = "";
+
+        if (pkg.dependencies !== undefined) {
+          result += justHurry(JSON.stringify(pkg.dependencies), false, true);
+        }
+
+        if (pkg !== null && pkg.devDependencies !== undefined) {
+          if (result !== "") result += " && ";
+          result += justHurry(JSON.stringify(pkg.devDependencies), true, true);
+        }
+
+        if (result.length > 0) {
+          return new Response(hydrate("", result, true, true), {
+            headers: { "Content-Type": "text/html" },
+          });
+        }
+      }
+
+      return new Response("How can I help you?", { status: 404 });
     }
   }
 }
