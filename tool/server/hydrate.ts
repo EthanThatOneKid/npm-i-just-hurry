@@ -1,12 +1,12 @@
-const HTML_TEMPLATE = Deno.readTextFileSync("./tool/server/index.html");
-
-export function hydrate(
+export async function hydrate(
   deps: string,
   result: string,
   devDeps?: boolean,
   preserveVersions?: boolean,
-): string {
-  return HTML_TEMPLATE
+): Promise<string> {
+  const template = await Deno.readTextFile("./tool/server/index.html");
+
+  return template
     .replace("%%deps%%", deps)
     .replace("%%output%%", result)
     .replace("%%dev_deps%%", devDeps ? "checked" : "")
